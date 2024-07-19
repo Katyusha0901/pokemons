@@ -1,5 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { pokemonsListStore } from "../app/pokemonsListStore";
+import { routes } from "../app/routes";
+import { Link } from "react-router-dom";
 
 export const MainPage = observer(() => {
   function takeId(pokemonInformation: { name: string; url: string }) {
@@ -12,7 +14,7 @@ export const MainPage = observer(() => {
           idNumbers.push(element);
         }
       });
-    return idNumbers.join();
+    return parseInt(idNumbers.join(""));
   }
 
   return (
@@ -29,9 +31,13 @@ export const MainPage = observer(() => {
         style={{ display: "flex", flexDirection: "column", padding: "10px" }}
       >
         {pokemonsListStore.list.map((pokemonInformation) => (
-          <div key={takeId(pokemonInformation)} style={{ padding: "10px" }}>
+          <Link
+            key={takeId(pokemonInformation)}
+            style={{ padding: "10px" }}
+            to={`/pokemon/${takeId(pokemonInformation)}`}
+          >
             {pokemonInformation.name}
-          </div>
+          </Link>
         ))}
       </div>
     </>

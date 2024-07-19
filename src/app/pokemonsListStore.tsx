@@ -1,5 +1,6 @@
 import { makeObservable, observable, autorun, action, runInAction } from "mobx";
-
+import { Pokemon } from "./types";
+import { PokemonStore } from "./pokemonStore";
 class PokemonsListStore {
   list: { name: string; url: string }[] = [];
   count: number = 0;
@@ -22,7 +23,17 @@ class PokemonsListStore {
       .catch((err) => console.log("Ошибка", err));
   };
 
-  pokemons = [];
+  pokemons: { id: number; store: Pokemon | null }[] = [];
+
+  takePokemonInformation = (id: number) => {
+    if (!this.pokemons.find((object) => object.id === id)) {
+      const pokemon = new PokemonStore(id);
+      this.pokemons.push({ id: id, store: pokemon.pokemonInformation });
+    } else {
+      console.log("yes");
+      return this.pokemons.find((object) => object.id === id);
+    }
+  };
 
   constructor() {
     makeObservable(this, {
@@ -31,6 +42,7 @@ class PokemonsListStore {
       currentPage: observable,
       pageSize: observable,
       changeList: action,
+      takePokemonInformation: action,
     });
     fetch(`https://pokeapi.co/api/v2/ability/?limit=20&offset=0`)
       .then((response) => response.json())

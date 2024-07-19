@@ -1,5 +1,5 @@
 export const routes = {
   home: "/",
-  country: (pokemonName?: string) =>
-    `/country/${pokemonName ?? ":pokemonName"}`,
+  pokemon: (pokemonName?: string) =>
+    `/pokemon/${pokemonName ?? ":pokemonName"}`,
 } as const;
