@@ -3,7 +3,7 @@ import { makeObservable, observable, autorun, action, runInAction } from "mobx";
 class PokemonsListStore {
   list: { name: string; url: string }[] = [];
   count: number = 0;
-  currentPage: number = 1;
+  currentPage: number = 0;
   pageSize: number = 20;
 
   fetchForChangeList = () => {};
@@ -17,11 +17,12 @@ class PokemonsListStore {
         runInAction(() => {
           this.list = data.results;
           this.count = data.count;
-          console.log("new");
         });
       })
       .catch((err) => console.log("Ошибка", err));
   };
+
+  pokemons = [];
 
   constructor() {
     makeObservable(this, {
@@ -31,7 +32,7 @@ class PokemonsListStore {
       pageSize: observable,
       changeList: action,
     });
-    fetch(`https://pokeapi.co/api/v2/ability/?limit=20&offset=20`)
+    fetch(`https://pokeapi.co/api/v2/ability/?limit=20&offset=0`)
       .then((response) => response.json())
       .then((data) => {
         this.list = data.results;
@@ -43,7 +44,6 @@ class PokemonsListStore {
 
 export const pokemonsListStore = new PokemonsListStore();
 
-autorun(() => console.log(pokemonsListStore.currentPage));
 autorun(() =>
   pokemonsListStore.changeList(
     pokemonsListStore.pageSize,

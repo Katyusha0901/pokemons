@@ -1,26 +1,18 @@
-// import { store } from "./store";
-import { useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
-import { pokemonsListStore } from "./listStore";
+import { Routes, Route } from "react-router-dom";
+import { routes } from "./routes";
+import { MainPage } from "../pages/MainPage";
 
-export const App = observer(() => {
-  console.log(pokemonsListStore.list);
+export function App() {
   return (
     <>
-      <div
-        className="App"
-        onClick={() => {
-          pokemonsListStore.currentPage += 1;
-          console.log(pokemonsListStore.list);
-        }}
-      >
-        button
-      </div>
-      <div>
-        {pokemonsListStore.list.map(
-          (pokemonInformation) => pokemonInformation.name
-        )}
-      </div>
+      <Routes>
+        <Route path={routes.home} element={<MainPage />}></Route>
+        <Route path={routes.country()} element={<PokemonPage />}></Route>
+        <Route
+          path={"*"}
+          element={<Navigate to={routes.home} replace />}
+        ></Route>
+      </Routes>
     </>
   );
-});
+}
